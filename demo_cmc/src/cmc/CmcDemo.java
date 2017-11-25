@@ -47,6 +47,40 @@ public class CmcDemo {
 	}
 	
 	private void expandirPuntosContiguos(Punto a, Punto b) {
+		List<Camino> listaCaminos = new ArrayList<Camino>();
+		int dist; 
+		int i=1;
+		listaCaminos.add(i, new Camino());
+		listaCaminos.listIterator(i).next().getListaPuntos().add(i, new Punto(a.x,a.y));
+		
+		
+		listaCaminos.listIterator(i).next().getListaPuntos().add(i, new Punto(a.x+1,a.y));
+		listaCaminos.listIterator(i).next().getListaPuntos().add(i, new Punto(a.x,a.y+1));
+		
+		dist = calcularDistancia(new Punto(a.x+1,a.y),b);
+		if (dist>calcularDistancia(new Punto(a.x-1,a.y),b)){
+			dist = calcularDistancia(new Punto(a.x-1,a.y),b);
+		}else if(dist>calcularDistancia(new Punto(a.x,a.y+1),b)){
+			dist = calcularDistancia(new Punto(a.x,a.y+1),b);
+		}else if(dist>calcularDistancia(new Punto(a.x,a.y-1),b)){
+			dist = calcularDistancia(new Punto(a.x,a.y-1),b);
+		}
+		
+		
+	}
+	
+	private int calcularDistancia(Punto a, Punto b){
+		int x,y;
+		x=a.x-b.x;
+		if(x<0)
+			x=x*-1;
+		y=a.y-b.y;
+		if(y<0)
+			y=y*-1;
+		return x+y;
+	}
+	
+	/*private void expandirPuntosContiguos(Punto a, Punto b) {
 		List<Punto> listaPuntos = new ArrayList<Punto>();
 		if (a.x < b.x) {
 			for(int x = a.x ; x < b.x; x++) {
@@ -67,7 +101,7 @@ public class CmcDemo {
 			}
 		}
 		cmc.dibujarCamino(listaPuntos);
-	}
+	}*/
 
 	/** consulta clase MapaInfo */
 	private void mostarColeccionDeAreas() {
