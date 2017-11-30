@@ -46,100 +46,104 @@ public class CmcDemo {
 		}
 	}
 	
-	private void expandirPuntosContiguos(Punto a, Punto b) {
-		List<Puntos> listaPuntos = new ArrayList<Puntos>(); // posibles puntos del camino
-		List<Puntos> listaCamino = new ArrayList<Puntos>(); // camino concreto
-		int i=0, j=0, p=0;
-		float menorCosto;
-		if (a.x != b.x && a.y != b.y){
-			listaCamino.add(p, new Puntos());
-			listaCamino.listIterator(p).next().setActual(a);
-			listaCamino.listIterator(p).next().setPredecesor(a);
-			listaCamino.listIterator(p).next().setCosto(calcularPeso(a,a));
-		}
-		while (a.x != b.x && a.y != b.y){
-			listaPuntos.add(i, new Puntos());
-			listaPuntos.listIterator(i).next().setActual(new Punto(a.x+1,a.y));
-			listaPuntos.listIterator(i).next().setPredecesor(a);
-			listaPuntos.listIterator(i).next().setCosto(calcularDistancia(new Punto(a.x+1,a.y), b )+ calcularPeso(a, new Punto (a.x+1, a.y)));
-			i++;
-			listaPuntos.add(i, new Puntos());
-			listaPuntos.listIterator(i).next().setActual(new Punto(a.x-1,a.y));
-			listaPuntos.listIterator(i).next().setPredecesor(a);
-			listaPuntos.listIterator(i).next().setCosto(calcularDistancia(new Punto(a.x-1,a.y), b) + calcularPeso(a, new Punto (a.x-1, a.y)));
-			i++;
-			listaPuntos.add(i, new Puntos());
-			listaPuntos.listIterator(i).next().setActual(new Punto(a.x,a.y+1));
-			listaPuntos.listIterator(i).next().setPredecesor(a);
-			listaPuntos.listIterator(i).next().setCosto(calcularDistancia(new Punto (a.x,a.y+1),b) + calcularPeso(a, new Punto (a.x, a.y+1)));
-			i++;
-			listaPuntos.add(i, new Puntos());
-			listaPuntos.listIterator(i).next().setActual(new Punto(a.x,a.y-1));
-			listaPuntos.listIterator(i).next().setPredecesor(a);
-			listaPuntos.listIterator(i).next().setCosto(calcularDistancia(new Punto(a.x,a.y-1), b) + calcularPeso(a, new Punto (a.x, a.y-1)));
-			i++;
-			i=0;
-			menorCosto= listaPuntos.listIterator(i).next().getCosto(); // busco punto de menor costo
-			for (i=1; i<8;i++){
-				if (menorCosto>listaPuntos.listIterator(i).next().getCosto()){
-					menorCosto = listaPuntos.listIterator(i).next().getCosto();
-					j=i;
-				}
-			}
-			p++;
-			listaCamino.add(p, new Puntos()); //agrego al camino el punto de menor peso
-			listaCamino.listIterator(p).next().setActual(listaPuntos.listIterator(j).next().getActual());
-			listaCamino.listIterator(p).next().setPredecesor(listaPuntos.listIterator(j).next().getPredecesor());
-			listaCamino.listIterator(p).next().setCosto(menorCosto + listaCamino.listIterator(p--).next().getCosto());
-			a = listaPuntos.listIterator(j).next().getActual(); // me muevo al punto de menor peso
-			listaPuntos.remove(j); // elimino el pto de menor peso en la listaPuntos
-			i= listaPuntos.size();
-			listaPuntos.listIterator(j)= listaPuntos.listIterator(i); // se puede igualar asi??????
-			j=listaCamino.size();
-			for (j;,j>0, j--){// si los puntos en la listaCaminos.actual estan en la listapuntos.actual se eliminan de listaPuntos
-				for (i=listaPuntos.size();i>0; i--){
-					if(listaCamino.listIterator(j).next().getActual()==listaPuntos.listIterator(i).next().getActual())
-						listaPuntos.remove(j);
-						listaPuntos.listIterator(j).next()= listaPuntos.listIterator(listaPuntos.size()).next();	// se puede igualar asi??????
-				}
-			}
-			menorCosto=0;
-		}
-		cmc.dibujarCamino(listaCamino);
-		}
+	 private void expandirPuntosContiguos(Punto a, Punto b) {
+	        List<Puntos> listaPuntos = new ArrayList<Puntos>(); // posibles puntos del camino
+	        List<Punto> listaCamino = new ArrayList<Punto>(); // posible camino
+	        int i=0, j;
+	        float menorCosto;
+	        if (a.x != b.x && a.y != b.y){
+	            listaCamino.add(new Punto(a.x, a.y));
+	            //listaCamino.add(p, new Puntos());
+	            //listaCamino.listIterator(p).next().setActual(a);
+	            //listaCamino.listIterator(p).next().setPredecesor(a);
+	            //listaCamino.listIterator(p).next().setCosto(calcularPeso(a,a));
+	        }
+	        while (a.x != b.x && a.y != b.y){
+	                if(a.x+1 != MapaInfo.LARGO && mapa.getDensidad(a.x+1, a.y)!=4){
+	                    listaPuntos.add(i, new Puntos());
+	                    listaPuntos.listIterator(i).next().setActual(new Punto(a.x+1,a.y));
+	                    listaPuntos.listIterator(i).next().setPredecesor(a);
+	                    listaPuntos.listIterator(i).next().setCosto(calcularDistancia(new Punto(a.x+1,a.y), b )+ calcularPeso(a, new Punto (a.x+1, a.y)));
+	                    i++;
+	                }
+	                else if(a.x-1 != -1 && mapa.getDensidad(a.x+1, a.y)!=4) {
+	                    listaPuntos.add(i, new Puntos());
+	                    listaPuntos.listIterator(i).next().setActual(new Punto(a.x-1,a.y));
+	                    listaPuntos.listIterator(i).next().setPredecesor(a);
+	                    listaPuntos.listIterator(i).next().setCosto(calcularDistancia(new Punto(a.x-1,a.y), b) + calcularPeso(a, new Punto (a.x-1, a.y)));
+	                    i++;
+	                }
+	                else if(a.y+1 != -1 && mapa.getDensidad(a.x+1, a.y)!=4){
+	                    listaPuntos.add(i, new Puntos());
+	                    listaPuntos.listIterator(i).next().setActual(new Punto(a.x,a.y+1));
+	                    listaPuntos.listIterator(i).next().setPredecesor(a);
+	                    listaPuntos.listIterator(i).next().setCosto(calcularDistancia(new Punto (a.x,a.y+1),b) + calcularPeso(a, new Punto (a.x, a.y+1)));
+	                    i++;                
+	                }
+	                else if(a.y-1 != MapaInfo.ALTO && mapa.getDensidad(a.x+1, a.y)!=4){
+	                    listaPuntos.add(i, new Puntos());
+	                    listaPuntos.listIterator(i).next().setActual(new Punto(a.x,a.y-1));
+	                    listaPuntos.listIterator(i).next().setPredecesor(a);
+	                    listaPuntos.listIterator(i).next().setCosto(calcularDistancia(new Punto(a.x,a.y-1), b) + calcularPeso(a, new Punto (a.x, a.y-1)));
+	                    i++;
+	                }
+	                //listaPuntos.sort();//ver como se escribe!! quiero ordenar de mayor a menor segun a.x!!
+	                i=listaPuntos.size();
+	                menorCosto= listaPuntos.listIterator(i).next().getCosto(); // busco punto de menor costo
+	                i++;
+	                j=i;
+	                for (; i>0;i--){
+	                    if (menorCosto>listaPuntos.listIterator(i).next().getCosto()){
+	                        menorCosto = listaPuntos.listIterator(i).next().getCosto();
+	                        j=i;
+	                    }
+	                }
+	                listaCamino.add(listaPuntos.listIterator(j).next().getActual());
+	                //listaCamino.add(p, new Puntos()); //agrego al camino el punto de menor peso
+	                //listaCamino.listIterator(p).next().setActual(listaPuntos.listIterator(j).next().getActual());
+	                //listaCamino.listIterator(p).next().setPredecesor(listaPuntos.listIterator(j).next().getPredecesor());
+	                //listaCamino.listIterator(p).next().setCosto(menorCosto + listaCamino.listIterator(p--).next().getCosto());
+	                a = listaPuntos.listIterator(j).next().getActual(); // me muevo al punto de menor peso
+	                listaPuntos.remove(j); // elimino el pto de menor peso en la listaPuntos
+	                i= listaPuntos.size()+1;
+	                j=listaCamino.size()+1;
+	                menorCosto=-1;
+	        }
+	            cmc.dibujarCamino(listaCamino);
+	            System.out.println(listaCamino);
 	}
-			
-	
-	
-private int calcularDistancia (Punto a, Punto b){
-	int cont=0;
-	if (a.x < b.x) {
-		for(int x = a.x ; x < b.x; x++) {
-			cont++;
-		}
-	} else {
-		for(int x = a.x ; x > b.x; x--) {
-			cont++;
-		}
+	        
+	    
+	    
+	private int calcularDistancia (Punto a, Punto b){
+	    int cont=0;
+	    if (a.x < b.x) {
+	        for(int x = a.x ; x < b.x; x++) {
+	            cont++;
+	        }
+	    } else {
+	        for(int x = a.x ; x > b.x; x--) {
+	            cont++;
+	        }
+	    }
+	    if (a.y < b.y) {
+	        for(int y = a.y ; y < b.y; y++) {
+	            cont++;
+	        }
+	    } else {
+	        for(int y = a.y ; y > b.y; y--) {
+	            cont++;
+	        }
+	    }
+	    return cont;
 	}
-	if (a.y < b.y) {
-		for(int y = a.y ; y < b.y; y++) {
-			cont++;
-		}
-	} else {
-		for(int y = a.y ; y > b.y; y--) {
-			cont++;
-		}
-	}
-	return cont;
-}
 
-private float calcularPeso(Punto a, Punto a2){
-	if (a.x!=a2.x && a.y!=a2.y)
-		return 144 + mapa.getDensidad(a2)*100;
-	else
-		return 100 + mapa.getDensidad(a2)*100;
-}
+	private float calcularPeso(Punto a, Punto a2){
+	    if (a.x!=a2.x && a.y!=a2.y)
+	        return 144 + mapa.getDensidad(a2)*100;
+	    else
+	        return 100 + mapa.getDensidad(a2)*100;
+	}
 
 	/*private void expandirPuntosContiguos(Punto a, Punto b) {
 		List<Punto> listaPuntos = new ArrayList<Punto>();
